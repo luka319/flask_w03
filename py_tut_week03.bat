@@ -1,0 +1,1 @@
+"W:\[__stepik]\[academy]\flask01_платный\week03\_задание_week03\venv\Scripts\python.exe" %*
