@@ -39,11 +39,14 @@
             <section class="teacher=info">
 
               <h1 class="h2">{{ name }}</h1>
-              <p><span class="badge badge-secondary mr-2">
+                <p>
                   {% for z,x in goals.items() %}
-                        {{ x }}
+                      <span class="badge badge-secondary mr-2">
+                        {{ x }} &nbsp;
+                      </span>
                   {% endfor %}
-              </span>Рейтинг: {{ rating }} Ставка: {{ price }} / час</p>
+                 </p>
+              <p>Рейтинг: {{ rating }} Ставка: {{ price }} / час</p>
               <p>{{ about }}</p>
 
             </section>

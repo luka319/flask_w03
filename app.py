@@ -29,7 +29,7 @@ def main_profiles(id_teacher):
     for z in te:
          if z["id"] == id_teacher:
             # z = id_teacher
-            print(f'{z["name"] =}')
+            # print(f'{z["name"] =}')
             name = z["name"]
             picture = z["picture"]
             about = z["about"]
@@ -143,29 +143,35 @@ def main_booking(id_teacher, day_of_week, time):
                            picture=picture,
                            )
 
-@app.route('/booking_done/<clientWeekday>/<clientTime>/<clientTeacher>/<clientName>/<clientPhone>/')
-# @app.route('/booking_done/', methods=['GET', 'POST'])
-def main_booking_done(clientWeekday, clientTime, clientTeacher,
-                       clientName,  clientPhone):
+# @app.route('/booking_done/<clientWeekday>/<clientTime>/<clientTeacher>/<clientName>/<clientPhone>/',
+#            methods=['POST'])
+@app.route('/booking_done/', methods=['GET', 'POST'])
+# def main_booking_done(clientWeekday, clientTime, clientTeacher,
+#                        clientName,  clientPhone):
+def main_booking_done():
+
 # def calc():
-#     if request.method == 'POST':
-#           a = request.form['clientWeekday']
-#           print(f"{a=}")
-#             # b = int(request.form['b'])
-#             # result = a + b
-#             # return f'{a} + {b} = {result}'
-#           # return f'Был получен {request.method} запрос.'
+     if request.method == 'POST':
+         clientWeekday = request.form['clientWeekday']
+         # print(f"{clientWeekday=}")
+         clientTime = request.form['clientTime']
+         # print(f"{clientTime=}")
+         clientTeacher = request.form['clientTeacher']
+         # print(f"{clientTeacher=}")
+         clientName = request.form['clientName']
+         # print(f"{clientName=}")
+         clientPhone = request.form['clientPhone']
+         # print(f"{clientPhone=}")
+
+    # сохраняю в booking.json
+    # with open('booking.json', 'w', encoding='utf-8') as f:
+    #     json.dump(data.teachers, f, ensure_ascii=False)
 
 
-    # """
-    # print(f"{clientWeekday=}")
-    #
-    # clientTime
-    # clientTeacher
-    # clientName
-    # clientPhone
-    # """
-    return render_template("booking_done.html", )
+    # return f'Был получен {request.method} запрос.'
+     return render_template("booking_done.html", clientWeekday=clientWeekday,
+                            clientTime=clientTime, clientTeacher=clientTeacher,
+                            clientName=clientName, clientPhone=clientPhone)
 
 
 if __name__ == '__main__':
