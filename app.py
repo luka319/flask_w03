@@ -3,6 +3,9 @@ from flask import Flask, render_template, request
 app = Flask(__name__)
 
 import json
+import calendar
+import os
+import locale
 
 @app.route('/')
 def main():
@@ -47,9 +50,11 @@ def main_profiles(id_teacher):
 
     # =======================================
     # calendar
-    import calendar
-    import os
-    import locale
+    engl_full_day = []
+    for day2 in calendar.day_name:
+        da2 = day2
+        # print(da.title())
+        engl_full_day.append(da2)
 
     if os.name == 'nt':
         locale.setlocale(locale.LC_ALL, "Russian_Russia.1251")
@@ -91,7 +96,7 @@ def main_profiles(id_teacher):
     return render_template("profile.html", name=name, picture=picture, about=about,
                            rating=rating, price=price, goals=goals, free=free,
                            week_=week_,day_false=day_false,
-                           id_te=id_te)
+                           id_te=id_te, engl_full_day=engl_full_day)
 
 @app.route('/request/')
 def main_request():
@@ -115,9 +120,7 @@ def main_booking(id_teacher, day_of_week, time):
             # print(f"{free =}")
     # =======================================
     # calendar
-    import calendar
-    import os
-    import locale
+
 
     if os.name == 'nt':
         locale.setlocale(locale.LC_ALL, "Russian_Russia.1251")
