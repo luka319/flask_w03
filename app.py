@@ -6,6 +6,7 @@ import json
 import calendar
 import os
 import locale
+import pathlib
 
 @app.route('/')
 def main():
@@ -18,8 +19,6 @@ def main_all():
 @app.route('/goals/<goal>/')
 def main_goals():
     return render_template("goal.html", )
-
-
 
 @app.route('/profiles/<int:id_teacher>/') # 4. Выведите страницу преподавателя
 def main_profiles(id_teacher):
@@ -152,8 +151,6 @@ def main_booking(id_teacher, day_of_week, time):
 # def main_booking_done(clientWeekday, clientTime, clientTeacher,
 #                        clientName,  clientPhone):
 def main_booking_done():
-
-# def calc():
      if request.method == 'POST':
          clientWeekday = request.form['clientWeekday']
          # print(f"{clientWeekday=}")
@@ -166,16 +163,36 @@ def main_booking_done():
          clientPhone = request.form['clientPhone']
          # print(f"{clientPhone=}")
 
-    # сохраняю в booking.json
-    # with open('booking.json', 'w', encoding='utf-8') as f:
-    #     json.dump(data.teachers, f, ensure_ascii=False)
+     # сохраняю в booking.json
+     path = pathlib.Path('booking.json')
+     if path.exists():
+         if path.is_file():
+             with open('booking.json', 'r', encoding='utf-8') as f:
+                 data_in = json.load(f)
+             count = len(data_in)
+         else:
+             print("booking.json не является файлом")
+             exit()
+     else:
+         print("booking.json не существует")
+         # exit()
+         count = 0
+         data_in = {}
+
+     data = {count + 1: [clientWeekday, clientTime,
+                    clientTeacher, clientName,
+                    clientPhone]
+              }
+     data_in.update(data)
+     data_out = data_in
+     with open('booking.json', 'w', encoding='utf-8') as f:
+        json.dump(data_out, f, ensure_ascii=False)
 
 
-    # return f'Был получен {request.method} запрос.'
+     # return f'Был получен {request.method} запрос.'
      return render_template("booking_done.html", clientWeekday=clientWeekday,
                             clientTime=clientTime, clientTeacher=clientTeacher,
                             clientName=clientName, clientPhone=clientPhone)
-
 
 if __name__ == '__main__':
     app.run()
