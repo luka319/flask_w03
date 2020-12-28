@@ -17,8 +17,41 @@ def main_all():
     return render_template("all.html", )
 
 @app.route('/goals/<goal>/')
-def main_goals():
-    return render_template("goal.html", )
+def main_goals(goal):
+    # en_goals = ["travel", "study", "work", "relocate"]
+    # ru_goals = ["путешествий", "школы", "работы", "переезда"]
+    # goals = dict(zip(en_goals, ru_goals))
+    # goal02 = goals[goal]
+    # print(f"{goal02 =}")
+    # print(f"{goal =}")
+    with open("goals.json", "r", encoding="utf-8") as f:
+        goals = json.load(f)  #
+
+    for zz, kk in goals.items():
+        # print(f'{zz =}')
+        # print(f'{kk =}')
+        pass
+    # goal02 = goals[goal][3:]
+
+    with open("teachers.json", "r", encoding="utf-8") as f:
+        te = json.load(f)  #
+    # print(f'{te =}')
+    # print(f'{id_teacher =}')
+    # name = "pass"
+    """
+    for z in te:
+        if goal in z['goals']:
+            # print(f"{z['goals'] =}")
+            name = z["name"]
+            # print(f"{name =}")
+            picture = z["picture"]
+            about = z["about"]
+            rating = z["rating"]
+            price = z["price"]
+            id_ = z["id"]
+    """
+
+    return render_template("goal.html", goal=goal, te=te, goals=goals)
 
 @app.route('/profiles/<int:id_teacher>/') # 4. Выведите страницу преподавателя
 def main_profiles(id_teacher):
@@ -141,8 +174,8 @@ def main_request_done():
     en_goals = ["travel","learn","work", "move"]
     ru_goals = ["Для путешествий", "Для школы", "Для работы", "Для переезда"]
     goals = dict(zip(en_goals, ru_goals))
-    # goal02 = goals[goal]
-    print(f"{goal02 =}")
+    goal02 = goals[goal]
+    # print(f"{goal02 =}")
 
     return render_template("request_done.html", goal=goal02, time_=time_,
                             name_=name_, phone=phone)
