@@ -101,9 +101,51 @@ def main_profiles(id_teacher):
 def main_request():
     return render_template("request.html",)
 
-@app.route('/request_done/')
+@app.route('/request_done/', methods=['POST'])
 def main_request_done():
-    return render_template("request_done.html", )
+    if request.method == 'POST':
+            goal = request.form['goal']
+            # print(f"{goal=}")
+            time_ = request.form['time']
+            # print(f"{time_=}")
+            name_ = request.form['name']
+            # print(f"{name_ =}")
+            phone = request.form['phone']
+            # print(f"{phone=}")
+
+            # сохраняю в request.json
+            path = pathlib.Path('request.json')
+            if path.exists():
+                if path.is_file():
+                    with open('request.json', 'r', encoding='utf-8') as f:
+                        data_in = json.load(f)
+                    count = len(data_in)
+                else:
+                    print("request.json не является файлом")
+                    exit()
+            else:
+                print("== request.json doesn't exists. It will be created! ==")
+                # exit()
+                count = 0
+                data_in = {}
+
+            data = {count + 1: [goal, time_,
+                            name_,
+                            phone]
+                    }
+            data_in.update(data)
+            data_out = data_in
+            with open('request.json', 'w', encoding='utf-8') as f:
+                json.dump(data_out, f, ensure_ascii=False)
+
+    en_goals = ["travel","learn","work", "move"]
+    ru_goals = ["Для путешествий", "Для школы", "Для работы", "Для переезда"]
+    goals = dict(zip(en_goals, ru_goals))
+    # goal02 = goals[goal]
+    print(f"{goal02 =}")
+
+    return render_template("request_done.html", goal=goal02, time_=time_,
+                            name_=name_, phone=phone)
 
 @app.route('/booking/<int:id_teacher>/<day_of_week>/<time>/')
 def main_booking(id_teacher, day_of_week, time):
