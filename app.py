@@ -8,13 +8,21 @@ import os
 import locale
 import pathlib
 
+with open("teachers.json", "r", encoding="utf-8") as f:
+    te = json.load(f)  #
+
 @app.route('/')
 def main():
-    return render_template("index.html",)
+    # print(f"{te=}")
+    import random
+    te_rand = random.sample(list(te), 6)
+    # print(f"{te_rand =}")
+    return render_template("index.html",te=te_rand)
 
 @app.route('/all/')
 def main_all():
-    return render_template("all.html", )
+
+    return render_template("all.html", te=te)
 
 @app.route('/goals/<goal>/')
 def main_goals(goal):
@@ -33,11 +41,6 @@ def main_goals(goal):
         pass
     # goal02 = goals[goal][3:]
 
-    with open("teachers.json", "r", encoding="utf-8") as f:
-        te = json.load(f)  #
-    # print(f'{te =}')
-    # print(f'{id_teacher =}')
-    # name = "pass"
     """
     for z in te:
         if goal in z['goals']:
@@ -56,10 +59,6 @@ def main_goals(goal):
 @app.route('/profiles/<int:id_teacher>/') # 4. Выведите страницу преподавателя
 def main_profiles(id_teacher):
 
-    with open("teachers.json", "r", encoding="utf-8") as f:
-        te = json.load(f)  #
-    # print(f'{te =}')
-    # print(f'{id_teacher =}')
     name = "pass"
     for z in te:
          if z["id"] == id_teacher:
