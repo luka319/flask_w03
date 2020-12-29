@@ -40,11 +40,11 @@
 
               <h1 class="h2">{{ name }}</h1>
                 <p>
-                  {% for z,x in goals.items() %}
-                      <span class="badge badge-secondary mr-2">
-                        {{ x }} &nbsp;
-                      </span>
-                  {% endfor %}
+                    {% for goa in goals_tut %}
+                     <span class="badge badge-secondary mr-2">
+                        {{ goals[goa] }}
+                     </span>
+                    {% endfor %}
                  </p>
               <p>Рейтинг: {{ rating }} Ставка: {{ price }} / час</p>
               <p>{{ about }}</p>

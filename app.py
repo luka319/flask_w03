@@ -12,6 +12,25 @@ import random
 with open("teachers.json", "r", encoding="utf-8") as f:
     te = json.load(f)  #
 
+with open("goals.json", "r", encoding="utf-8") as f:
+        goals = json.load(f)  #
+
+# p 10. Добавьте еще одну цель
+# – добавьте новую цель "для программирования" преподавателям   8,9,10,11
+# сохраняю в teachers.json
+for qa in [8,9,10,11]:
+    if not "programming" in te[qa]["goals"]:
+        te[qa]["goals"].append("programming")
+        with open('teachers.json', 'w', encoding='utf-8') as f:
+             json.dump(te, f, ensure_ascii=False)
+
+# сохраняю в goals.json
+goa = {"programming": "Для программирования"}
+if not "programming" in goals.keys():
+      goals.update(goa)
+      with open('goals.json', 'w', encoding='utf-8') as f:
+             json.dump(goals, f, ensure_ascii=False)
+
 @app.route('/')
 def main():
     # print(f"{te=}")
@@ -59,9 +78,6 @@ def main_goals(goal):
     # goal02 = goals[goal]
     # print(f"{goal02 =}")
     # print(f"{goal =}")
-    with open("goals.json", "r", encoding="utf-8") as f:
-        goals = json.load(f)  #
-
     for zz, kk in goals.items():
         # print(f'{zz =}')
         # print(f'{kk =}')
@@ -91,6 +107,8 @@ def main_profiles(id_teacher):
          if z["id"] == id_teacher:
             # z = id_teacher
             # print(f'{z["name"] =}')
+            goals_tut = z["goals"]
+            # print(f'{goals_tut =}')
             name = z["name"]
             picture = z["picture"]
             about = z["about"]
@@ -154,7 +172,8 @@ def main_profiles(id_teacher):
     return render_template("profile.html", name=name, picture=picture, about=about,
                            rating=rating, price=price, goals=goals, free=free,
                            week_=week_,day_false=day_false,
-                           id_te=id_te, engl_full_day=engl_full_day)
+                           id_te=id_te, engl_full_day=engl_full_day,
+                           goals_tut=goals_tut)
 
 @app.route('/request/')
 def main_request():
@@ -197,8 +216,8 @@ def main_request_done():
             with open('request.json', 'w', encoding='utf-8') as f:
                 json.dump(data_out, f, ensure_ascii=False)
 
-    en_goals = ["travel","learn","work", "move"]
-    ru_goals = ["Для путешествий", "Для школы", "Для работы", "Для переезда"]
+    en_goals = ["travel","learn","work", "move", "progr"]
+    ru_goals = ["Для путешествий", "Для школы", "Для работы", "Для переезда", "Для программирования"]
     goals = dict(zip(en_goals, ru_goals))
     goal02 = goals[goal]
     # print(f"{goal02 =}")
@@ -298,6 +317,5 @@ def main_booking_done():
 if __name__ == '__main__':
     app.run()
 """
----> 1. Распишите роуты, выведите текст:
 
 """
