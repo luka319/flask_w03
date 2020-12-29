@@ -10,14 +10,14 @@
 <body>
   <header class="container mt-3">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">TINYSTEPS</a>
+      <a class="navbar-brand" href="/">TINYSTEPS</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item active">
-            <a class="nav-link" href="/">Все репетиторы</a>
+            <a class="nav-link" href="/all/">Все репетиторы</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/request/">Заявка на подбор</a>
@@ -37,78 +37,109 @@
       <div class="row">
       <div class="col-12 col-lg-10 offset-lg-1 m-auto">
 
-
         <div class="card mb-4">
           <div class="card-body align-right">
 
-            <p class="lead float-left d-inline-block mt-2 mb-0"><strong>15 преподавателей в базе</strong></p>
+            <p class="lead float-left d-inline-block mt-2 mb-0"><strong>{{ te|length }} преподавателей в базе</strong></p>
 
-            <form class="float-right d-inline-block">
+            <form action="/all/" class="float-right d-inline-block" >
               <div class="form-inline">
-                <select class="custom-select my-1 mr-2" id="inlineFormCustomSelectPref">
-                  <option selected>В случайном порядке</option>
-                  <option value="3">Сначала лучшие по рейтингу</option>
-                  <option value="1">Сначала дорогие</option>
-                  <option value="2">Сначала недорогие</option>
+                <select class="custom-select my-1 mr-2" id="inlineFormCustomSelectPref" name="n">
+                  <option {{ select_rand }} value="rand">В случайном порядке</option>
+                  <option {{ select_best }} value="best_rating">Сначала лучшие по рейтингу</option>
+                  <option {{ select_expensive }} value="expensive_first">Сначала дорогие</option>
+                  <option {{ select_cheap }} value="cheap_first">Сначала недорогие</option>
                 </select>
                 <button type="submit" class="btn btn-primary my-1">Сортировать</button>
               </div>
             <form>
-
+{#                {% if request.args %} req_.args ={{ request.args }}{% endif %}#}
           </div>
         </div>
-
-
-        <div class="card mb-4">
+        {% if select_best %}
+           {% for z in te|sort(attribute="rating", reverse=True) %}
+         <div class="card mb-4">
           <div class="card-body">
             <div class="row">
-              <div class="col-3"><img src="../static/pict 1.png" class="img-fluid" alt=""></div>
+              <div class="col-3"><img src="{{ z["picture"] }}" class="img-fluid" alt="">
+              </div>
               <div class="col-9">
-                <p class="float-right">Рейтинг: 4.8 Ставка: 1200 / час</p>
-                <h2 class="h4">Morris Simmmons</h2>
-                <p>Репетитор американского английского языка. Структурированная система обучения. Всем привет! Я предпочитаю называть себя «тренером» английского языка. Мои занятия похожи на тренировки</p>
-                <a href="profile.html" class="btn btn-outline-primary btn-sm mr-3 mb-2">Показать информаци и расписание</a>
-
+                <p class="float-right">Рейтинг: {{ z["rating"] }} Ставка: {{ z["price"] }} / час</p>
+                <h2 class="h4">{{ z["name"] }}</h2>
+                <p>{{ z["about"] }}</p>
+                <a href="/profiles/{{ z["id"] }}" class="btn btn-outline-primary btn-sm mr-3 mb-2">Показать информацию и расписание</a>
               </div>
             </div>
           </div>
         </div>
+        {% endfor %}
+        {% endif %} {# select best #}
 
+        {% if select_rand %}
+           {% for z in te %}
         <div class="card mb-4">
           <div class="card-body">
             <div class="row">
-              <div class="col-3"><img src="../static/pict 2.png" class="img-fluid" alt=""></div>
+              <div class="col-3"><img src="{{ z["picture"] }}" class="img-fluid" alt="">
+              </div>
               <div class="col-9">
-                <p class="float-right">Рейтинг: 4.8 Ставка: 900 / час</p>
-                <h2 class="h4">Julie Nguyen</h2>
-                <p>Сертифицированный репетитор IELTS. Являюсь сертифицировнным CELTA преподавателем английского языка, проживающим за границей. Опыт работы в сфере преподавания - 9 лет.</p>
-                <a href="#" class="btn btn-outline-primary btn-sm mr-3 mb-2">Показать информаци и расписание</a>
-
+                <p class="float-right">Рейтинг: {{ z["rating"] }} Ставка: {{ z["price"] }} / час</p>
+                <h2 class="h4">{{ z["name"] }}</h2>
+                <p>{{ z["about"] }}</p>
+                <a href="/profiles/{{ z["id"] }}" class="btn btn-outline-primary btn-sm mr-3 mb-2">Показать информацию и расписание</a>
               </div>
             </div>
           </div>
         </div>
-        <div class="card mb-4">
+        {% endfor %}
+        {% endif %} {# select rand #}
+
+        {% if select_expensive %}
+           {% for z in te|sort(attribute="price", reverse=True) %}
+         <div class="card mb-4">
           <div class="card-body">
             <div class="row">
-              <div class="col-3"><img src="../static/pict 3.png" class="img-fluid" alt=""></div>
+              <div class="col-3"><img src="{{ z["picture"] }}" class="img-fluid" alt="">
+              </div>
               <div class="col-9">
-                <p class="float-right">Рейтинг: 4.8 Ставка: 1300 / час</p>
-                <h2 class="h4">Wendy Edwards</h2>
-                <p>Молодой и современный репетитор и переводчик с четырёхлетним опытом работы репетиторства Индивидуальные занятия по скайпу, которые ведёт молодой специалист отделения "Перевода </p>
-                <a href="#" class="btn btn-outline-primary btn-sm mr-3 mb-2">Показать информаци и расписание</a>
-
+                <p class="float-right">Рейтинг: {{ z["rating"] }} Ставка: {{ z["price"] }} / час</p>
+                <h2 class="h4">{{ z["name"] }}</h2>
+                <p>{{ z["about"] }}</p>
+                <a href="/profiles/{{ z["id"] }}" class="btn btn-outline-primary btn-sm mr-3 mb-2">Показать информацию и расписание</a>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+        {% endfor %}
+        {% endif %} {# select expensive #}
+
+        {% if select_cheap %}
+           {% for z in te|sort(attribute="price") %}
+         <div class="card mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-3"><img src="{{ z["picture"] }}" class="img-fluid" alt="">
+              </div>
+              <div class="col-9">
+                <p class="float-right">Рейтинг: {{ z["rating"] }} Ставка: {{ z["price"] }} / час</p>
+                <h2 class="h4">{{ z["name"] }}</h2>
+                <p>{{ z["about"] }}</p>
+                <a href="/profiles/{{ z["id"] }}" class="btn btn-outline-primary btn-sm mr-3 mb-2">Показать информацию и расписание</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {% endif %} {# select cheap #}
+
+
+      </div> <!-- class="col-12 col-lg-10 offset-lg-1 m-auto"> -->
+    </div> <!-- class="row"> -->
 
     <h2 class="text-center mt-5 mb-3">Не нашли своего репетитора?</h2>
     <p class="text-center mb-4">Расскажите, кто вам нужен и мы подберем его сами</p>
     <div class="text-center pb-5">
-        <a href="request.html" class="btn btn-primary">Заказать подбор</a>
+        <a href="/request/" class="btn btn-primary">Заказать подбор</a>
     </div>
 
 

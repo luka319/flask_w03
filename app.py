@@ -7,6 +7,7 @@ import calendar
 import os
 import locale
 import pathlib
+import random
 
 with open("teachers.json", "r", encoding="utf-8") as f:
     te = json.load(f)  #
@@ -14,15 +15,41 @@ with open("teachers.json", "r", encoding="utf-8") as f:
 @app.route('/')
 def main():
     # print(f"{te=}")
-    import random
     te_rand = random.sample(list(te), 6)
     # print(f"{te_rand =}")
     return render_template("index.html",te=te_rand)
 
-@app.route('/all/')
+@app.route('/all/', methods=['POST',"GET"])
 def main_all():
+    # if request.method == 'GET':
+    #     goal = request.form['goal']
+    # print(f"{request.args =}")
+    # print(f"{request.args.get('n') =}") # '3'
+    select_rand=""
+    select_best = ""
+    select_expensive = ""
+    select_cheap = ""
+    req_get = request.args.get('n')
+    if req_get == "rand":
+        select_rand = "selected"
+    elif req_get == "best_rating":
+        select_best = "selected"
+    elif req_get == "expensive_first":
+        select_expensive = "selected"
+    elif req_get == "cheap_first":
+        select_cheap = "selected"
 
-    return render_template("all.html", te=te)
+    # В случайном порядке
+    # Сначала лучшие по рейтингу
+    # Сначала дорогие
+    # Сначала недорогие
+
+    te_rand = random.sample(list(te), len(te))
+    # print(f"{te_rand =}")
+
+    return render_template("all.html", te=te_rand, select_rand=select_rand,
+                           select_best=select_best, select_expensive=select_expensive,
+                           select_cheap=select_cheap)
 
 @app.route('/goals/<goal>/')
 def main_goals(goal):
